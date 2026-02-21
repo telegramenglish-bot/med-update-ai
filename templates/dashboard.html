@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Med Update AI</title>
+</head>
+<body>
+    <h1>Medical AI Update Dashboard</h1>
+    
+    {% for article in articles %}
+        <hr>
+        <h2>{{ article.title }}</h2>
+        <p><strong>Specialty:</strong> {{ article.specialty }}</p>
+        <p><strong>Summary:</strong></p>
+        <p>{{ article.translated_summary }}</p>
+    {% endfor %}
+</body>
+</html>
