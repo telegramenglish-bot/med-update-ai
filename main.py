@@ -70,3 +70,42 @@ def update():
         })
     
     return {"updates": results}
+
+
+from fastapi import Depends, HTTPException
+from sqlalchemy.orm import Session
+from .models import User
+from .auth import hash_password, verify_password, create_access_token
+from pydantic import BaseModel
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+
+@app.post("/register")
+def register(user: UserCreate):
+    db = SessionLocal()
+    
+    db_user = User(
+        email=user.email,
+        password=hash_password(user.password)
+    )
+    
+    db.add(db_user)
+    db.commit()
+    db.close()
+    
+    return {"message": "User created"}
+
+@app.post("/login")
+def login(user: UserCreate):
+    db = SessionLocal()
+    db_user = db.query(User).filter(User.email == user.email).first()
+    
+    if not db_user or not verify_password(user.password, db_user.password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    token = create_access_token({"sub": db_user.email})
+    db.close()
+    
+    return {"access_token": token}
