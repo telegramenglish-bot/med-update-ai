@@ -47,3 +47,32 @@ def create_checkout(data: CheckoutRequest):
     checkout_url = create_checkout_session(data.email, price_id)
     
     return {"checkout_url": checkout_url}
+
+
+@app.post("/stripe-webhook")
+async def stripe_webhook(request: Request):
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature")
+    endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except Exception as e:
+        return {"error": str(e)}
+
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+        customer_email = session.get("customer_email")
+
+        db = SessionLocal()
+        user = db.query(User).filter(User.email == customer_email).first()
+
+        if user:
+            user.subscription_plan = "pro"
+            db.commit()
+
+        db.close()
+
+    return {"status": "success"}
