@@ -109,3 +109,11 @@ def login(user: UserCreate):
     db.close()
     
     return {"access_token": token}
+
+class UsageLog(Base):
+    __tablename__ = "usage_logs"
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer)
+    action = Column(String)
+    timestamp = Column(DateTime, default=datetime.utcnow)
