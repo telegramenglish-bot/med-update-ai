@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from .database import engine
-from .models import Base, Article
+from .models import Base, Article, User
 from .scheduler import start_scheduler
 from sqlalchemy.orm import Session
 from .database import SessionLocal
