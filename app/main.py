@@ -12,6 +12,8 @@ import os
 import stripe
 from fastapi import Request
 
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
