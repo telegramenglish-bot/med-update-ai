@@ -8,6 +8,7 @@ from .models import Base, Article
 from .scheduler import start_scheduler
 from sqlalchemy.orm import Session
 from .database import SessionLocal
+import os
 
 Base.metadata.create_all(bind=engine)
 
