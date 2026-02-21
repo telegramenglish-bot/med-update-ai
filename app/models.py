@@ -25,3 +25,4 @@ class User(Base):
     password = Column(String)
     is_active = Column(Boolean, default=True)
     subscription_plan = Column(String, default="free")
+    preferred_language = Column(String, default="es")
