@@ -2,3 +2,8 @@ fastapi
 uvicorn
 requests
 openai
+sqlalchemy
+psycopg2-binary
+jinja2
+apscheduler
+python-multipart
